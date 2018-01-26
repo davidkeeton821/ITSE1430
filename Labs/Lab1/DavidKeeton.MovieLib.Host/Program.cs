@@ -1,4 +1,8 @@
-﻿using System;
+﻿// David Keeton
+// ITSE 1430
+// 1/26/2018
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +14,40 @@ namespace DavidKeeton.MovieLib.Host
     {
         static void Main( string[] args )
         {
-            //Main Menu
-            //List the movies
-            //Add a new movie
-            //Remove a Movie
-            //Exit
+            bool menu = true;
+            do
+            {
+                
+                //Main Menu
+                Console.WriteLine("Welcome to your Movie Library");
+                Console.WriteLine("1. List Movies");
+                Console.WriteLine("2. Add a Movie");
+                Console.WriteLine("3. Remove a Movie");
+                Console.WriteLine("4. Exit");
 
+                //Get user input
+                int choice = Console.Read();
+
+                //Switch control statement
+                switch (choice)
+                {
+                    case 1:
+                        //ListMovies
+                        break;
+                    case 2:
+                        //AddMovie
+                        break;
+                    case 3:
+                        //RemoveMovie
+                        break;
+                    case 4:
+                        menu = false;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice, please try again.");
+                        break;
+                }
+            } while (menu);
         }
 
         //Function: Add a movie
