@@ -36,9 +36,8 @@ namespace Nile.Host
 
             //Get description
             _description = ReadString("Enter optional description: ", false);
-
-
         }
+
         private static decimal ReadDecimal( string message,decimal minValue)
         {
             do
@@ -57,6 +56,7 @@ namespace Nile.Host
                 Console.WriteLine("Value must be >= {0}", minValue);
             } while (true);
         }
+
         private static string ReadString(string message, bool isRequired)
         {
             do
@@ -72,7 +72,6 @@ namespace Nile.Host
                 Console.WriteLine("Value is required");
             } while (true);
         }
-
 
 
         private static char DisplayMenu()
