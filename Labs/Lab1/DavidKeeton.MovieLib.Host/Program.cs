@@ -63,31 +63,47 @@ namespace DavidKeeton.MovieLib.Host
         static string _description;
         static int _length;
         static bool _owned;
+
         static void ListMovies()
         {
-            // TODO
+            if (!String.IsNullOrEmpty(_title))
+            {
+                Console.WriteLine(_title);      
+                Console.WriteLine(_description);
+                Console.WriteLine(_length);     
+                if(_owned)
+                    Console.WriteLine("Y");
+                else
+                    Console.WriteLine("N");
+            } else
+                Console.WriteLine("No movies currently in list");
         }
         static void RemoveMovie()
         {
-            // TODO
+            _title = "";
+            _description = "";
+            _length = 0;
+            _owned = false;
+            Console.WriteLine("Movie Deleted");
         }
         static void AddMovie()
         {
             //Get Movie variables
             //Title: string, requried
-            string _title = ReadString("Enter a Title: ", true);
+            _title = ReadString("Enter a Title: ", true);
             //Description: string, Optional
-            string _description = ReadString("Enter an optional Description: ", false);
+            _description = ReadString("Enter an optional Description: ", false);
             //Length: Int, Optional
-            int _length = ReadInt("Enter an optional Length: ", 0);
+            _length = ReadInt("Enter an optional Length: ", 0);
             //Owned: Boolean, Required
-            bool _owned = ReadBool("Do you own this movie? (Y/N) ", true);
+            _owned = ReadBool("Do you own this movie? (Y/N) ", true);
         }
 
         private static string ReadTrim(string message)
         { 
             //Display message to user
             Console.Write(message);
+
             //Store and Trim string to prep for parse
             string value = Console.ReadLine();
             value = value.Trim();
@@ -99,16 +115,17 @@ namespace DavidKeeton.MovieLib.Host
         {
             do
             {
-                //Read in value and trim/prepare from parse
+                //Read in value and trim/prepare for parse
                 string value = ReadTrim(message);
 
                 //If not required or empty
                 if (!isRequired || !String.IsNullOrEmpty(value))
+                {
                     if (String.Compare(value, "Y", true) == 0)
                         return true;
                     if (String.Compare(value, "N", true) == 0)
                         return false;
-
+                }
                 Console.WriteLine("\"Y\" or \"N\" value is required");
             } while (true);
         }
@@ -134,19 +151,14 @@ namespace DavidKeeton.MovieLib.Host
             {
                 //Read in value and trim/ prepare from parse
                 string value = ReadTrim(message);
-
-                if (Int32.TryParse(value, out int result))
-                {
-                    //If not required or empty
-                    if (result >= 0)
-                        return result;
-                }
+                
+                //If not required or empty
+                if (Int32.TryParse(value, out int result) && result >= 0)
+                    return result;
 
                 string msg = $"Value must be >= {minValue}";
                 Console.WriteLine(msg);
             } while (true);
         }
-
-
     }
 }
