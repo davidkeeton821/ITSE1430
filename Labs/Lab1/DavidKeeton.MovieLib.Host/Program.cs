@@ -1,6 +1,6 @@
-﻿// David Keeton
-// ITSE 1430
-// 1/26/2018
+﻿// ITSE 1430
+// David Keeton
+// 1/31/2018
 
 using System;
 using System.Collections.Generic;
@@ -13,20 +13,20 @@ namespace DavidKeeton.MovieLib.Host
     class Program
     {
         static void Main( string[] args )
-        {           
+        {
             bool quit = false;
             do
             {
                 //Get user input
                 int choice = displayMenu();
-                
+
                 //Switch control statement
                 switch (choice)
                 {
-                    case 1:ListMovies(); break;                                           
-                    case 2:AddMovie(); break;                                          
-                    case 3:RemoveMovie(); break;                                           
-                    case 4:quit = true; break;
+                    case 1: ListMovies(); break;
+                    case 2: AddMovie(); break;
+                    case 3: RemoveMovie(); break;
+                    case 4: quit = true; break;
                 };
             } while (!quit);
         }
@@ -43,37 +43,110 @@ namespace DavidKeeton.MovieLib.Host
                 Console.WriteLine("4. Exit");
 
                 string input = Console.ReadLine();
+                input = input.Trim();
 
-                if (input == "1")
+                if (String.Compare(input, "1", true) == 0)
                     return 1;
-                else if (input == "2")
+                else if (String.Compare(input, "2", true) == 0)
                     return 2;
-                else if (input == "3")
+                else if (String.Compare(input, "3", true) == 0)
                     return 3;
-                else if (input == "4")
+                else if (String.Compare(input, "4", true) == 0)
                     return 4;
 
                 Console.WriteLine("Please choose a valid option.");
             }
         }
 
-        static void AddMovie()
-        {
-            //Get Movie variables
-            //Title: string, requried
-            //Description: string, Optional
-            //Length: Int, Optional
-            //Owned: Boolean, Required
-        }              
-
+        //data for a movie
+        static string _title;
+        static string _description;
+        static int _length;
+        static bool _owned;
         static void ListMovies()
         {
             // TODO
         }
-
         static void RemoveMovie()
         {
             // TODO
         }
+        static void AddMovie()
+        {
+            //Get Movie variables
+            //Title: string, requried
+            string _title = ReadString("Enter a Title: ", true);
+            //Description: string, Optional
+            string _description = ReadString("Enter an optional Description: ", false);
+            //Length: Int, Optional
+            int _length = ReadInt("Enter an optional Length: ", 0);
+            //Owned: Boolean, Required
+            bool _owned = ReadBool("Do you own this movie? (Y/N) ", true);
+        }
+
+        private static string ReadTrim(string message)
+        { 
+            //Display message to user
+            Console.Write(message);
+            //Store and Trim string to prep for parse
+            string value = Console.ReadLine();
+            value = value.Trim();
+
+            return value;
+        }
+
+        private static bool ReadBool( string message, bool isRequired )
+        {
+            do
+            {
+                //Read in value and trim/prepare from parse
+                string value = ReadTrim(message);
+
+                //If not required or empty
+                if (!isRequired || !String.IsNullOrEmpty(value))
+                    if (String.Compare(value, "Y", true) == 0)
+                        return true;
+                    if (String.Compare(value, "N", true) == 0)
+                        return false;
+
+                Console.WriteLine("\"Y\" or \"N\" value is required");
+            } while (true);
+        }
+
+        private static string ReadString (string message, bool isRequired)
+        {
+            do
+            {
+                //Read in value and trim/ prepare from parse
+                string value = ReadTrim(message);
+
+                //If not required or empty
+                if (!isRequired || !String.IsNullOrEmpty(value))
+                    return value;
+
+                Console.WriteLine("Value is required");
+            } while (true);
+        }
+
+        private static int ReadInt(string message, int minValue)
+        {
+            do
+            {
+                //Read in value and trim/ prepare from parse
+                string value = ReadTrim(message);
+
+                if (Int32.TryParse(value, out int result))
+                {
+                    //If not required or empty
+                    if (result >= 0)
+                        return result;
+                }
+
+                string msg = $"Value must be >= {minValue}";
+                Console.WriteLine(msg);
+            } while (true);
+        }
+
+
     }
 }
