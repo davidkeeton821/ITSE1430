@@ -11,13 +11,16 @@ namespace Nile.Host
         static void Main( string[] args )
         {
             bool quit = false;
-            while(!quit)
+            while (!quit)
             {
+                //Equality
+                bool isEqual = quit.Equals(10);
+
                 // Display Menu
                 char choice = DisplayMenu();
 
                 //Process menu selection
-                switch (choice)
+                switch (Char.ToUpper(choice))
                 {
                     case 'L': ListProducts(); break;
                     case 'A': AddProducts(); break;
@@ -38,7 +41,7 @@ namespace Nile.Host
             _description = ReadString("Enter optional description: ", false);
         }
 
-        private static decimal ReadDecimal( string message,decimal minValue)
+        private static decimal ReadDecimal( string message, decimal minValue )
         {
             do
             {
@@ -53,11 +56,14 @@ namespace Nile.Host
                         return result;
                 }
 
+                //Formatting strings
+                //string msg = String.Format("Value must be >= {0}", minValue);
+                //Consle.WriteLine(msg);
                 Console.WriteLine("Value must be >= {0}", minValue);
             } while (true);
         }
 
-        private static string ReadString(string message, bool isRequired)
+        private static string ReadString( string message, bool isRequired )
         {
             do
             {
@@ -66,7 +72,7 @@ namespace Nile.Host
                 string value = Console.ReadLine();
 
                 //If not required or empty
-                if (!isRequired || value != "")
+                if (!isRequired || !String.IsNullOrEmpty(value))
                     return value;
 
                 Console.WriteLine("Value is required");
@@ -83,12 +89,26 @@ namespace Nile.Host
                 Console.WriteLine("Q)uit");
 
                 string input = Console.ReadLine();
+                //input.ToLower();
+                input = input.ToUpper();
+                //remove whitespace
+                input = input.Trim();
 
-                if (input == "L")
+                //Padding
+                //input = input.PadLeft(10);
+
+                //Starts with
+                //input.StartsWith(@"\");
+                //input.EndsWith(@"\");
+
+                //Substring
+                //string newValue = input.Substring(0, 10);
+
+                if (String.Compare(input,"L", true) == 0) // -1 Left is bigger, 0 equal, 1 right string is bigger, 3rd value- ignore case
                     return input[0];    //array syntax to select what character to return from string
-                else if (input == "A")
+                else if (String.Compare(input, "A", true) == 0)
                     return input[0];
-                else if (input == "Q")
+                else if (String.Compare(input, "Q", true) == 0)
                     return input[0];
 
                 Console.WriteLine("Please choose a valid option");
@@ -98,12 +118,32 @@ namespace Nile.Host
         static void ListProducts()
         {
             //Are there any products
-            if (_name != null && _name != "")
+            //if (_name != null && _name != String.Empty)
+            //if (_name != null && _name != name.Length == 0)
+            //if (_name != null && _name != "")
+            if (!String.IsNullOrEmpty(_name))
             {
-                //display a product
-                Console.WriteLine(_name);
-                Console.WriteLine(_price);
-                Console.WriteLine(_description);
+                //display a product - name [$price]
+                //                    <description>
+
+                //String formatting
+                //var msg = String.Format("{0} [${1}]", _name, _price);
+
+                //String concatenation
+                //var msg = _name + " [$" + _price + "]";
+
+                //String concat part 2
+                //var msg = String.Concat(_name, " [$", _price, "]");
+
+                //String interpolation
+                string msg = $"{_name} [${_price}]";
+                Console.WriteLine(msg);
+
+                //Console.WriteLine(_name);
+                //Console.WriteLine(_price);
+                
+                if (!String.IsNullOrEmpty(_description))
+                    Console.WriteLine(_description);
             } else
                 Console.WriteLine("No Products");
         }
