@@ -23,10 +23,18 @@ namespace DavidKeeton.MovieLib.Host
                 //Switch control statement
                 switch (choice)
                 {
-                    case 1: ListMovies(); break;
-                    case 2: AddMovie(); break;
-                    case 3: RemoveMovie(); break;
-                    case 4: quit = true; break;
+                    case 1:
+                    ListMovies();
+                    break;
+                    case 2:
+                    AddMovie();
+                    break;
+                    case 3:
+                    RemoveMovie();
+                    break;
+                    case 4:
+                    quit = true;
+                    break;
                 };
             } while (!quit);
         }
@@ -54,7 +62,7 @@ namespace DavidKeeton.MovieLib.Host
                 else if (String.Compare(input, "4", true) == 0)
                     return 4;
 
-                Console.WriteLine("Please choose a valid option.");
+                Console.WriteLine("Please choose a valid option.\n");
             }
         }
 
@@ -68,24 +76,35 @@ namespace DavidKeeton.MovieLib.Host
         {
             if (!String.IsNullOrEmpty(_title))
             {
-                Console.WriteLine(_title);      
+                Console.Write("\n");
+                Console.WriteLine(_title);
                 Console.WriteLine(_description);
-                Console.WriteLine(_length);     
-                if(_owned)
-                    Console.WriteLine("Y");
+                Console.WriteLine($"Run time = {_length} mins");
+                Console.Write("Status = ");
+                if (_owned)
+                    Console.WriteLine("Owned\n");
                 else
-                    Console.WriteLine("N");
+                    Console.WriteLine("Not Owned\n");
             } else
-                Console.WriteLine("No movies currently in list");
+                Console.WriteLine("No movies currently in list\n");
         }
+
         static void RemoveMovie()
         {
-            _title = "";
-            _description = "";
-            _length = 0;
-            _owned = false;
-            Console.WriteLine("Movie Deleted");
+            if (String.IsNullOrEmpty(_title))
+            {
+                Console.WriteLine("No Movie to delete.\n");
+            } else
+            {
+                //Set values to initial values to simulate deletion
+                _title = "";
+                _description = "";
+                _length = 0;
+                _owned = false;
+                Console.WriteLine("Movie Deleted\n");
+            }
         }
+
         static void AddMovie()
         {
             //Get Movie variables
@@ -97,10 +116,11 @@ namespace DavidKeeton.MovieLib.Host
             _length = ReadInt("Enter an optional Length: ", 0);
             //Owned: Boolean, Required
             _owned = ReadBool("Do you own this movie? (Y/N) ", true);
+            Console.Write("\n");
         }
 
-        private static string ReadTrim(string message)
-        { 
+        private static string ReadTrim( string message )
+        {
             //Display message to user
             Console.Write(message);
 
@@ -130,7 +150,7 @@ namespace DavidKeeton.MovieLib.Host
             } while (true);
         }
 
-        private static string ReadString (string message, bool isRequired)
+        private static string ReadString( string message, bool isRequired )
         {
             do
             {
@@ -145,13 +165,13 @@ namespace DavidKeeton.MovieLib.Host
             } while (true);
         }
 
-        private static int ReadInt(string message, int minValue)
+        private static int ReadInt( string message, int minValue )
         {
             do
             {
                 //Read in value and trim/ prepare from parse
                 string value = ReadTrim(message);
-                
+
                 //If not required or empty
                 if (Int32.TryParse(value, out int result) && result >= 0)
                     return result;
