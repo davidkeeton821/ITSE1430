@@ -3,10 +3,6 @@
 // 2/5/2018
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DavidKeeton.MovieLib.Host
 {
@@ -17,10 +13,10 @@ namespace DavidKeeton.MovieLib.Host
             var quit = false;
             do
             {
-                //Get user input
-                int choice = displayMenu();
+                //Display menu and get user input
+                var choice = DisplayMenu();
 
-                //Switch control statement
+                //use users choice
                 switch (choice)
                 {
                     case 1: ListMovies(); Console.WriteLine(); break;
@@ -31,7 +27,7 @@ namespace DavidKeeton.MovieLib.Host
             } while (!quit);
         }
 
-        static int displayMenu()
+        static int DisplayMenu()
         {
             while (true)
             {
@@ -42,12 +38,14 @@ namespace DavidKeeton.MovieLib.Host
                 Console.WriteLine("3. Remove a Movie");
                 Console.WriteLine("4. Exit");
 
+                //get input, prepare for parse and return
                 var input = Console.ReadLine();
                 input = input.Trim();
 
                 //screen formatting
-                Console.WriteLine("");
+                Console.WriteLine();
 
+                //return user input
                 if (String.Compare(input, "1", true) == 0)
                     return 1;
                 else if (String.Compare(input, "2", true) == 0)
@@ -57,6 +55,7 @@ namespace DavidKeeton.MovieLib.Host
                 else if (String.Compare(input, "4", true) == 0)
                     return 4;
 
+                //error message
                 Console.WriteLine("Please choose a valid option.\n");
             }
         }
@@ -95,11 +94,14 @@ namespace DavidKeeton.MovieLib.Host
             } 
             else
             {
+                //error message
                 Console.WriteLine("There are no movies to list.");
             }
         }
+
         static void RemoveMovie()
         {
+            //rewrite all values to initial values
             if(!String.IsNullOrEmpty(_title))
             {
                 _title = "";
@@ -109,18 +111,23 @@ namespace DavidKeeton.MovieLib.Host
                 Console.WriteLine("Movie Deleted.");
             } else
             {
+                // required item _title is already empty/null, so there is no movie to delete
                 Console.WriteLine("No movie to delete.");
             }
         }
+
         static void AddMovie()
         {
             //Get Movie variables
             //Title: string, requried
             _title = ReadString("Enter a Title: ", true);
+
             //Description: string, Optional
             _description = ReadString("Enter an optional Description: ", false);
+
             //Length: Int, Optional
             _length = ReadInt("Enter an optional Length: ", 0);
+
             //Owned: Boolean, Required
             _owned = ReadBool("Do you own this movie? (Y/N) ", true);
         }
@@ -129,10 +136,12 @@ namespace DavidKeeton.MovieLib.Host
         { 
             //Display message to user
             Console.Write(message);
+
             //Store and Trim string to prep for parse
             var value = Console.ReadLine();
             value = value.Trim();
 
+            //return clean string to be used
             return value;
         }
 
@@ -150,6 +159,7 @@ namespace DavidKeeton.MovieLib.Host
                     if (String.Compare(value, "N", true) == 0)
                         return false;
 
+                //error message
                 Console.WriteLine("\"Y\" or \"N\" value is required\n");
             } while (true);
         }
@@ -165,6 +175,7 @@ namespace DavidKeeton.MovieLib.Host
                 if (!isRequired || !String.IsNullOrEmpty(value))
                     return value;
 
+                //error message
                 Console.WriteLine("Value is required.\n");
             }
         }
@@ -176,6 +187,7 @@ namespace DavidKeeton.MovieLib.Host
                 //Read in value and trim/ prepare from parse
                 var value = ReadTrim(message);
 
+                //out variable if is true if value is an int, and it will be assigned to result
                 if (Int32.TryParse(value, out var result))
                 {
                     //If not required or empty
@@ -183,6 +195,7 @@ namespace DavidKeeton.MovieLib.Host
                         return result;
                 }
 
+                //error message
                 var msg = $"Value must be >= {minValue}\n";
                 Console.WriteLine(msg);
             } while (true);
