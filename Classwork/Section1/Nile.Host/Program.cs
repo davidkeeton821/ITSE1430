@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+// ITSE 1430 Section 1
 namespace Nile.Host
 {
     class Program
@@ -49,7 +45,7 @@ namespace Nile.Host
 
                 string value = Console.ReadLine();
 
-                if (Decimal.TryParse(value, out decimal result))
+                if (Decimal.TryParse(value, out var result))
                 {
                     //If not required or empty
                     if (result >= minValue)
@@ -115,6 +111,7 @@ namespace Nile.Host
             } while (true);
         }
 
+        //contains all string format manipulation syntax
         static void ListProducts()
         {
             //Are there any products
@@ -204,6 +201,39 @@ namespace Nile.Host
                 double floor = ceiling;
 
             }
+        }
+
+        static void PlayingWithReferences ()
+        {
+            var message = "Hello";
+            string name = null;
+
+            name = new string('*', 10);
+
+            object instance = name;
+
+            //is operator
+            if (instance is string)
+            {
+                string str = (string)instance;
+                Console.WriteLine(str);
+            } else
+                Console.WriteLine("Not a string");
+
+            //As operator
+            string str2 = instance as string;
+            if (str2 != null)
+            {
+                Console.WriteLine(str2);
+            } else
+                Console.WriteLine("Not a string");
+
+            //pattern matching
+            if(instance is string str3)
+            {
+                Console.WriteLine(str3);
+            } else
+                Console.WriteLine("Not a string");
         }
     }
 }
