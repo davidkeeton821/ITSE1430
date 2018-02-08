@@ -101,18 +101,23 @@ namespace DavidKeeton.MovieLib.Host
 
         static void RemoveMovie()
         {
-            //rewrite all values to initial values
-            if(!String.IsNullOrEmpty(_title))
+            //Confirm deletion of the movie
+            var delete = ReadBool("Do you want to delete this movie? (Y/N) ", true);
+
+            if (delete)
             {
-                _title = "";
-                _description = "";
-                _length = 0;
-                _owned = false;
-                Console.WriteLine("Movie Deleted.");
-            } else
-            {
-                // required item _title is already empty/null, so there is no movie to delete
-                Console.WriteLine("No movie to delete.");
+                if (!String.IsNullOrEmpty(_title))
+                {    //rewrite all values to initial values
+                    _title = "";
+                    _description = "";
+                    _length = 0;
+                    _owned = false;
+                    Console.WriteLine("Movie Deleted.");
+                } else
+                {
+                    // required item _title is already empty/null, so there is no movie to delete
+                    Console.WriteLine("No movie to delete.");
+                }
             }
         }
 
