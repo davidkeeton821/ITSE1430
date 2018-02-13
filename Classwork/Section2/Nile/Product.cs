@@ -11,19 +11,70 @@ namespace Nile
     {
         internal decimal DiscountPercentage = 0.10M;
 
-        /// <summary> Get the product name. </summary>
-        /// <returns>The name.</returns>
-        public string GetName()
+        /// <summary>Gets or sets the description.</summary>
+        /// <value></value>
+        // value tag allows documenting default value if not "0"
+        public string Description
         {
-            return _name ?? ""; //null coalescing operator
+            //Accessors
+            get { return _description ?? ""; }
+            // Set method can do whatever needed, switch, if/else, method call etc.
+            set { _description = value ?? ""; }
         }
 
-        /// <summary> Sets the product name. </summary>
-        /// <param name="value">The name.</param>
-        public void SetName( string value)
+        /// <summary>Gets or sets the name.</summary>
+        public string Name
         {
-            _name = value ?? ""; //null coalescing operator
+            //Accessors
+            get { return _name ?? ""; }
+            set { _name = value; }
         }
+
+        /// <summary>Gets or sets the Price.</summary>
+        // using auto property here
+        public decimal Price
+        {
+            //get { return _price; }
+            //set { _price = value; }
+            get; set;
+        } = 0;
+
+        /// <summary>Gets or sets true or false if product is discontinued.</summary>
+        public bool IsDiscontinued
+        {    //Accessors
+             get;set;
+        }
+
+        //public int ShowingOffAccessibility
+        //{
+        //    get { }
+        //    internal set { }
+        //}
+        /// <summary>Gets the price, with any discontinued discounts.</summary>
+        public decimal ActualPrice
+        {
+            get {
+                if (IsDiscontinued)
+                    return Price - (Price * DiscountPercentage);
+
+                return Price;
+            }
+            //set { }
+        }
+
+        ///// <summary> Get the product name. </summary>
+        ///// <returns>The name.</returns>
+        //public string GetName()
+        //{
+        //    return _name ?? ""; //null coalescing operator
+        //}
+
+        ///// <summary> Sets the product name. </summary>
+        ///// <param name="value">The name.</param>
+        //public void SetName( string value)
+        //{
+        //    _name = value ?? ""; //null coalescing operator
+        //}
 
         /// <summary>Validates the product.</summary>
         /// <returns>Error message, if any</returns>
@@ -33,7 +84,7 @@ namespace Nile
             if (String.IsNullOrEmpty(_name))
                 return "Name cannot be empty";
 
-            if (_price < 0)
+            if (Price < 0)
                 return "Price must be >= 0";
 
             return "";
@@ -41,7 +92,7 @@ namespace Nile
 
         private string _name;
         private string _description;
-        private decimal _price;
-        private bool _isDiscontinued;
+        //private decimal _price;
+        //private bool _isDiscontinued;
     }
 }
