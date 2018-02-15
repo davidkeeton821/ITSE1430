@@ -31,9 +31,9 @@
             this._textName = new System.Windows.Forms.TextBox();
             this._textDescription = new System.Windows.Forms.TextBox();
             this._textPrice = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this._chkIsDicsontinued = new System.Windows.Forms.CheckBox();
+            this._buttonSave = new System.Windows.Forms.Button();
+            this._buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,52 +41,56 @@
             // 
             // _textName
             // 
-            this._textName.Location = new System.Drawing.Point(54, 25);
+            this._textName.Location = new System.Drawing.Point(79, 25);
             this._textName.Name = "_textName";
             this._textName.Size = new System.Drawing.Size(169, 20);
             this._textName.TabIndex = 0;
             // 
             // _textDescription
             // 
-            this._textDescription.Location = new System.Drawing.Point(54, 60);
+            this._textDescription.Location = new System.Drawing.Point(79, 64);
+            this._textDescription.Multiline = true;
             this._textDescription.Name = "_textDescription";
-            this._textDescription.Size = new System.Drawing.Size(169, 20);
+            this._textDescription.Size = new System.Drawing.Size(186, 42);
             this._textDescription.TabIndex = 1;
             // 
             // _textPrice
             // 
-            this._textPrice.Location = new System.Drawing.Point(54, 103);
+            this._textPrice.Location = new System.Drawing.Point(79, 119);
             this._textPrice.Name = "_textPrice";
             this._textPrice.Size = new System.Drawing.Size(169, 20);
             this._textPrice.TabIndex = 2;
             // 
-            // checkBox1
+            // _chkIsDicsontinued
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(54, 148);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this._chkIsDicsontinued.AutoSize = true;
+            this._chkIsDicsontinued.Location = new System.Drawing.Point(79, 145);
+            this._chkIsDicsontinued.Name = "_chkIsDicsontinued";
+            this._chkIsDicsontinued.Size = new System.Drawing.Size(105, 17);
+            this._chkIsDicsontinued.TabIndex = 3;
+            this._chkIsDicsontinued.Text = "Is Discontinued?";
+            this._chkIsDicsontinued.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // _buttonSave
             // 
-            this.button1.Location = new System.Drawing.Point(52, 210);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this._buttonSave.Location = new System.Drawing.Point(79, 182);
+            this._buttonSave.Name = "_buttonSave";
+            this._buttonSave.Size = new System.Drawing.Size(75, 23);
+            this._buttonSave.TabIndex = 4;
+            this._buttonSave.Text = "Save";
+            this._buttonSave.UseVisualStyleBackColor = true;
+            this._buttonSave.Click += new System.EventHandler(this.OnSave);
             // 
-            // button2
+            // _buttonCancel
             // 
-            this.button2.Location = new System.Drawing.Point(156, 210);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this._buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this._buttonCancel.Location = new System.Drawing.Point(183, 182);
+            this._buttonCancel.Name = "_buttonCancel";
+            this._buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this._buttonCancel.TabIndex = 5;
+            this._buttonCancel.Text = "Cancel";
+            this._buttonCancel.UseVisualStyleBackColor = true;
+            this._buttonCancel.Click += new System.EventHandler(this.OnCancel);
             // 
             // label1
             // 
@@ -95,37 +99,38 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "label1";
+            this.label1.Text = "Name";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 67);
+            this.label2.Location = new System.Drawing.Point(13, 71);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 7;
-            this.label2.Text = "label2";
+            this.label2.Text = "Description";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 106);
+            this.label3.Location = new System.Drawing.Point(17, 122);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
+            this.label3.Size = new System.Drawing.Size(31, 13);
             this.label3.TabIndex = 8;
-            this.label3.Text = "label3";
+            this.label3.Text = "Price";
             // 
             // ProductDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.CancelButton = this._buttonCancel;
+            this.ClientSize = new System.Drawing.Size(299, 236);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this._buttonCancel);
+            this.Controls.Add(this._buttonSave);
+            this.Controls.Add(this._chkIsDicsontinued);
             this.Controls.Add(this._textPrice);
             this.Controls.Add(this._textDescription);
             this.Controls.Add(this._textName);
@@ -133,6 +138,7 @@
             this.MinimizeBox = false;
             this.Name = "ProductDetailForm";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Product Details";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -144,9 +150,9 @@
         private System.Windows.Forms.TextBox _textName;
         private System.Windows.Forms.TextBox _textDescription;
         private System.Windows.Forms.TextBox _textPrice;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox _chkIsDicsontinued;
+        private System.Windows.Forms.Button _buttonSave;
+        private System.Windows.Forms.Button _buttonCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
