@@ -19,6 +19,21 @@ namespace Nile.Windows
 
         public Product Product { get; set; }
 
+        //Type override, then onload, method autogenerates
+        protected override void OnLoad( EventArgs e )
+        {
+            base.OnLoad(e);
+
+            //Load Product
+            if (Product != null)
+            {
+                _textName.Text = Product.Name;
+                _textDescription.Text = Product.Description;
+                _textPrice.Text = Product.Price.ToString();
+                _chkIsDicsontinued.Checked = Product.IsDiscontinued;
+            }
+        }
+
         private void OnCancel( object sender, EventArgs e )
         {
             //DialogResult set to Cancel, no method needed

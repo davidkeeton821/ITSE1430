@@ -56,35 +56,50 @@ namespace Nile.Windows
 
         private void OnProductAdd( object sender, EventArgs e )
         {
+            var button = sender as ToolStripMenuItem;
+
             var form = new ProductDetailForm();
             form.Text = "Add Product";
 
-            //Show for modally
-            var result = form.ShowDialog();
-            if (result != DialogResult.OK)
+            //Show form modally
+            var result = form.ShowDialog(this); //show child form (ProductRetailForm), return back dailog result
+            if (result != DialogResult.OK)  //use dialog result from child form
                 return;
 
+            //"Add" the product
             _product = form.Product;
         }
 
         private void OnProductRemove( object sender, EventArgs e )
         {
             if (ShowConfirmation("Are you sure?", "Remove Product"))
-                return;
-
-            //TODO: Remove Product
-            MessageBox.Show("Not Implented");
+                _product = null;
+            return;
         }
         
 
         private void OnProductEdit( object sender, EventArgs e )
         {
-           MessageBox.Show(this, "Not Implemented", "Product Edit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //dont show form to edit if theres nothing to edit
+            if (_product == null)
+                return;
+
+            var form = new ProductDetailForm();
+            form.Text = "Edit Product";
+            form.Product = _product;
+
+            //Show form modally
+            var result = form.ShowDialog(this); //show child form (ProductRetailForm), return back dailog result
+            if (result != DialogResult.OK)  //use dialog result from child form
+                return;
+
+            //"Editing" the product
+            _product = form.Product;
         }
 
         private void OnFileExit( object sender, EventArgs e )
         {
-            MessageBox.Show(this, "Not Implemented", "File Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            Close();
         }
 
         private void OnHelpAbout( object sender, EventArgs e )
