@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * David Keeton
+ * 2/23/2018
+ * Lab2 ITSE 1430
+ */
+
+using System;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DavidKeeton.MovieLib.Windows
 {
+    /// <summary>Gives information on a MovieDetailForm</summary>
     public partial class MovieDetailForm : Form
     {
 
@@ -30,6 +31,7 @@ namespace DavidKeeton.MovieLib.Windows
         }
         #endregion
 
+        /// <summary>Gets and sets the movie property</summary>
         public Movie Movie { get; set; }
 
         protected override void OnLoad( EventArgs e )
@@ -44,12 +46,13 @@ namespace DavidKeeton.MovieLib.Windows
                 _chkIsOwned.Checked = Movie.Owned;
             }
 
-            //TODO: Validation
+            ValidateChildren();
         }
 
         private void OnSave( object sender, EventArgs e )
         {
-            //TODO: Validation
+            if(!ValidateChildren())
+                return;
 
             var movie = new Movie();
             movie.Title = _textTitle.Text;
@@ -57,7 +60,13 @@ namespace DavidKeeton.MovieLib.Windows
             movie.Length = ConvertToInt(_textLength);
             movie.Owned = _chkIsOwned.Checked;
 
-            //TODO: VAlidation
+            //Validation
+            var message = movie.Validate();
+            if(!String.IsNullOrEmpty(message))
+            {
+                DisplayError(message);
+                return;
+            }
 
             Movie = movie;
             DialogResult = DialogResult.OK;
@@ -70,6 +79,33 @@ namespace DavidKeeton.MovieLib.Windows
                 return price;
 
             return -1;
+        }
+
+        private void DisplayError( string message )
+        {
+            MessageBox.Show(this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void _textTitle_Validating( object sender, CancelEventArgs e )
+        {
+            var textbox = sender as TextBox;
+            if (String.IsNullOrEmpty(textbox.Text))
+            {
+                _errorProvider.SetError(textbox, "Title is required");
+                e.Cancel = true;
+            } else
+                _errorProvider.SetError(textbox, "");
+        }
+
+        private void _textLength_Validating( object sender, CancelEventArgs e )
+        {
+            var textbox = sender as TextBox;
+            if (ConvertToInt(textbox) <= 0)
+            {
+                _errorProvider.SetError(textbox, "Length must be >= 0");
+                e.Cancel = true;
+            } else
+                _errorProvider.SetError(textbox, "");
         }
     }
 }

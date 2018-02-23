@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+ * David Keeton
+ * 2/23/2018
+ * Lab2 ITSE 1430
+ */
+
+using System;
 using System.Windows.Forms;
 
 namespace DavidKeeton.MovieLib.Windows
@@ -13,11 +12,8 @@ namespace DavidKeeton.MovieLib.Windows
     public partial class MainForm : Form
     {
         //TODO
-        //Adding a movie validates the data.
-        //Editing when no movie exists displays an error.
         //Each file has a file header.
-        //Public types and members have doctags.
-        // 
+         
         public MainForm()
         {
             InitializeComponent();
@@ -42,7 +38,10 @@ namespace DavidKeeton.MovieLib.Windows
         private void OnMoviesEdit( object sender, EventArgs e )
         {
             if (_movie == null)
+            {
+                MessageBox.Show(this, "No movie to edit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
 
             var form = new MovieDetailForm(_movie);
 

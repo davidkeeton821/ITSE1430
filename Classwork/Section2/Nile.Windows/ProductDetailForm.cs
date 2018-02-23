@@ -85,7 +85,6 @@ namespace Nile.Windows
                 DisplayError(message);
                 return;               
             }
-            
 
             //return from form
             Product = product;
