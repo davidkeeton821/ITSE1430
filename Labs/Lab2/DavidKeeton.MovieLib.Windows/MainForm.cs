@@ -17,7 +17,7 @@ namespace DavidKeeton.MovieLib.Windows
         //Editing when no movie exists displays an error.
         //Each file has a file header.
         //Public types and members have doctags.
-
+        // 
         public MainForm()
         {
             InitializeComponent();
