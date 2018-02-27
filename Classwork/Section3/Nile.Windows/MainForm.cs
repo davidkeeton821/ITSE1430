@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Nile.Data.Memory;
+
+namespace Nile.Windows
+{
+    public partial class MainForm : Form
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        protected override void OnLoad( EventArgs e )
+        {
+            base.OnLoad(e);
+
+            RefreshUI();
+        }
+
+        #region Event Handlers
+        private void RefreshUI()
+        {
+            //Get products
+            var products = _database.GetAll();
+
+            //Bind to grid
+            dataGridView1.DataSource = products;
+        }
+        #endregion
+
+        private void PlayingWithProductMembers()
+        {
+            var product = new Product();
+
+            //properties cannot be used in place of variables as seen below
+            Decimal.TryParse("123", out var price);
+            product.Price = price;
+
+            var name = product.Name;
+            //var name = product.GetName();
+            product.Name = "Product A";
+            product.Price = 50;
+            product.IsDiscontinued = true;
+
+            //product.ActualPrice = 10;
+            var price2 = product.ActualPrice;
+
+            //product.SetName("Product A");
+            //product.Description = "None";
+            var error = product.Validate();
+
+            var str = product.ToString();
+
+            var productB = new Product();
+            //productB.Name = "Product B";
+            //productB.SetName("Product B");
+            //productB.Description = product.Description;
+            error = productB.Validate();
+        }
+
+        private void OnProductAdd( object sender, EventArgs e )
+        {
+            var button = sender as ToolStripMenuItem;
+
+            var form = new ProductDetailForm("Add Product");
+
+            //Show form modally
+            var result = form.ShowDialog(this); //show child form (ProductRetailForm), return back dailog result
+            if (result != DialogResult.OK)  //use dialog result from child form
+                return;
+
+            //Add to database
+            _database.Add(form.Product, out var message);
+            if (!String.IsNullOrEmpty(message))
+                MessageBox.Show(message);
+            
+        }
+
+        private void OnProductRemove( object sender, EventArgs e )
+        {
+            //Get the first product
+            var products = _database.GetAll();
+            var product = (products.Length > 0) ? products[0] : null;
+            if (product == null)
+                return;
+
+            //var index = FindEmptyProductIndex() - 1;
+            //if (index < 0)
+            //    return;
+
+            if (!ShowConfirmation("Are you sure?", "Remove Product"))
+                return;
+
+            //Remove product
+            _database.Remove(product.Id);
+        }
+        
+
+        private void OnProductEdit( object sender, EventArgs e )
+        {
+            //Get the first product
+            var products = _database.GetAll();
+            var product = (products.Length > 0) ? products[0] : null;
+            if (product == null)
+                return;
+
+            //var index = FindEmptyProductIndex() - 1;
+            //if (index < 0)
+            //    return;
+
+            var form = new ProductDetailForm(product);
+
+            //Show form modally
+            var result = form.ShowDialog(this); //show child form (ProductRetailForm), return back dailog result
+            if (result != DialogResult.OK)  //use dialog result from child form
+                return;
+
+            //Add to database
+            _database.Edit(form.Product, out var message);
+            if (!String.IsNullOrEmpty(message))
+                MessageBox.Show(message);
+        }
+
+        private void OnFileExit( object sender, EventArgs e )
+        {
+            Close();
+        }
+
+        private void OnHelpAbout( object sender, EventArgs e )
+        {
+            MessageBox.Show(this, "Not Implemented", "Help About", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
+
+        private bool ShowConfirmation( string message, string title)
+        {
+            return (MessageBox.Show(this, message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
+        }
+
+        private MemoryProductDatabase _database = new MemoryProductDatabase();
+    }
+}
