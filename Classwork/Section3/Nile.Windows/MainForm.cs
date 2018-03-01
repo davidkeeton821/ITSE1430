@@ -81,14 +81,14 @@ namespace Nile.Windows
             _database.Add(form.Product, out var message);
             if (!String.IsNullOrEmpty(message))
                 MessageBox.Show(message);
-            
+
+            RefreshUI();
         }
 
         private void OnProductRemove( object sender, EventArgs e )
         {
-            //Get the first product
-            var products = _database.GetAll();
-            var product = (products.Length > 0) ? products[0] : null;
+            //Get selected product
+            var product = GetSelectedProduct();
             if (product == null)
                 return;
 
@@ -101,14 +101,15 @@ namespace Nile.Windows
 
             //Remove product
             _database.Remove(product.Id);
+
+            RefreshUI();
         }
         
 
         private void OnProductEdit( object sender, EventArgs e )
         {
-            //Get the first product
-            var products = _database.GetAll();
-            var product = (products.Length > 0) ? products[0] : null;
+            //Get selected product
+            var product = GetSelectedProduct();
             if (product == null)
                 return;
 
@@ -124,9 +125,12 @@ namespace Nile.Windows
                 return;
 
             //Add to database
+            form.Product.Id = product.Id;
             _database.Edit(form.Product, out var message);
             if (!String.IsNullOrEmpty(message))
                 MessageBox.Show(message);
+
+            RefreshUI();
         }
 
         private void OnFileExit( object sender, EventArgs e )
@@ -137,6 +141,14 @@ namespace Nile.Windows
         private void OnHelpAbout( object sender, EventArgs e )
         {
             MessageBox.Show(this, "Not Implemented", "Help About", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
+
+        private Product GetSelectedProduct ()
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+                return dataGridView1.SelectedRows[0].DataBoundItem as Product;
+
+            return null;
         }
 
         private bool ShowConfirmation( string message, string title)

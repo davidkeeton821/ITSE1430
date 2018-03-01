@@ -12,24 +12,26 @@ namespace Nile.Data.Memory
         public MemoryProductDatabase()
         {
             //Seed products
-            _products = new Product[25];
             var product = new Product();
+            product.Id = _nextId++;
             product.Name = "iPhone X";
             product.IsDiscontinued = true;
             product.Price = 1500;
-            _products[0] = product;
+            _products.Add(product);
 
             product = new Product();
+            product.Id = _nextId++;
             product.Name = "Windows Phone";
             product.IsDiscontinued = true;
             product.Price = 15;
-            _products[1] = product;
+            _products.Add(product);
 
             product = new Product();
+            product.Id = _nextId++;
             product.Name = "Samsung S8";
             product.IsDiscontinued = false;
             product.Price = 800;
-            _products[2] = product;
+            _products.Add(product);
         }
 
 
@@ -50,15 +52,18 @@ namespace Nile.Data.Memory
             };
 
             //TODO: Verify Unique product
-
-            var index = FindEmptyProductIndex();
-            if (index < 0)
-            {
-                message = "Out of memory";
-                return null;
-            };
-            _products[index] = product;
+            //var index = FindEmptyProductIndex();
+            //if (index < 0)
+            //{
+            //    message = "Out of memory";
+            //    return null;
+            //};
+            //Clone the object
+            product.Id = _nextId++;
+            _products.Add(Clone(product));
             message = null;
+
+            //return a copy
             return product;
         }
 
@@ -81,15 +86,20 @@ namespace Nile.Data.Memory
             //TODO: Verify Unique product except current product
 
             //Find Existing
-            var existingIndex = GetByID(product.Id);
-            if(existingIndex < 0)
+            var existing = GetByID(product.Id);
+            if(existing == null)
             {
                 message = "Product not found";
                 return null;
             }
+            //Clone the object
+            //_products[existingIndex] = Clone(product);
+            //
 
-            _products[existingIndex] = product;
+            Copy(existing, product);
             message = null;
+
+            //return a copy
             return product;
         }
 
@@ -97,40 +107,67 @@ namespace Nile.Data.Memory
         {
             if (id > 0)
             {
-                var index = GetByID(id);
-                if (index >= 0)
-                    _products[index] = null;
+                var existing = GetByID(id);
+                if (existing != null)
+                    _products.Remove(existing);
             };
         }
 
         public Product[] GetAll()
         {
-            return _products;
-        }
-
-        private int FindEmptyProductIndex()
-        {
-            //find empty arrary element
-            for (var index = 0; index < _products.Length; index++)
+            //return a copy so caller cannot change the underlying data
+            var items = new List<Product>();
+            foreach (var product in _products)
             {
-                if (_products[index] == null)
-                    return index;
+                if(product != null)
+                    items.Add(Clone(product));
             };
 
-            return -1;
+            return items.ToArray();
         }
 
-        private int GetByID (int id)
+        private Product Clone ( Product item )
         {
-            for (var index = 0; index < _products.Length; index++)
-            {
-                if (_products[index]?.Id == id)
-                    return index;
-            }
+            var newProduct = new Product();
+            Copy(newProduct, item);
 
-            return -1;
+            return newProduct;
         }
 
-        private Product[] _products;
+        private void Copy (Product target, Product source)
+        {
+            var newProduct = new Product();
+            target.Id = source.Id;
+            target.Name = source.Name;
+            target.Description = source.Description;
+            target.Price = source.Price;
+            target.IsDiscontinued = source.IsDiscontinued;
+        }
+
+        //private int FindEmptyProductIndex()
+        //{
+        //    //find empty arrary element
+        //    for (var index = 0; index < _products.Length; index++)
+        //    {
+        //        if (_products[index] == null)
+        //            return index;
+        //    };
+
+        //    return -1;
+        //}
+
+        private Product GetByID( int id )
+        {
+            foreach (var product in _products)
+            {
+                if (product.Id == id)
+                    return product;
+            };
+
+            return null;
+        }
+
+        private readonly List<Product> _products = new List<Product>();
+        private int _nextId = 1;
     }
 }
