@@ -71,12 +71,13 @@ namespace Nile.Windows
             if (!ValidateChildren())
                 return;
 
-            // Create Product
-            var product = new Product();
-            product.Name = _textName.Text;
-            product.Description = _textDescription.Text;
-            product.Price = ConvertToPrice(_textPrice);
-            product.IsDiscontinued = _chkIsDicsontinued.Checked;
+            // Create Product - using object initializer syntax
+            var product = new Product() {
+            Name = _textName.Text,
+            Description = _textDescription.Text,
+            Price = ConvertToPrice(_textPrice),
+            IsDiscontinued = _chkIsDicsontinued.Checked,
+            };
 
             //Validate
             var message = product.Validate();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,27 +12,23 @@ namespace Nile.Data.Memory
     {
         public MemoryProductDatabase()
         {
-            //Seed products
-            var product = new Product();
-            product.Id = _nextId++;
-            product.Name = "iPhone X";
-            product.IsDiscontinued = true;
-            product.Price = 1500;
-            _products.Add(product);
+            //Array version
+            //var prods = new []
+            //    {
+            //        new Product(),
+            //        new Product()
+            //    };
 
-            product = new Product();
-            product.Id = _nextId++;
-            product.Name = "Windows Phone";
-            product.IsDiscontinued = true;
-            product.Price = 15;
-            _products.Add(product);
-
-            product = new Product();
-            product.Id = _nextId++;
-            product.Name = "Samsung S8";
-            product.IsDiscontinued = false;
-            product.Price = 800;
-            _products.Add(product);
+            _products = new List<Product>() 
+            {
+                //Seed products
+                new Product() {Id = _nextId++,Name = "iPhone X",
+                               IsDiscontinued = true, Price = 1500,},
+                new Product() {Id = _nextId++,Name = "Windows Phone",
+                               IsDiscontinued = true,Price = 15,},
+                new Product() {Id = _nextId++,Name = "Samsung S8",
+                               IsDiscontinued = false,Price = 800}             
+            }; 
         }
 
 
@@ -44,10 +41,10 @@ namespace Nile.Data.Memory
             };
 
             //Validate product
-            var error = product.Validate();
-            if (!String.IsNullOrEmpty(error))
+            var errors = ObjectValidator.Validate(product);
+            if (errors.Count() > 0)
             {
-                message = error;
+                message = errors.ElementAt(0).ErrorMessage;
                 return null;
             };
 
