@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Nile.Data;
 using Nile.Data.Memory;
 
 namespace Nile.Windows
@@ -32,39 +33,39 @@ namespace Nile.Windows
             var products = _database.GetAll();
 
             //Bind to grid
-            dataGridView1.DataSource = products;
+            dataGridView1.DataSource = new List<Product>(products);
         }
         #endregion
 
-        private void PlayingWithProductMembers()
-        {
-            var product = new Product();
+        //private void PlayingWithProductMembers()
+        //{
+        //    var product = new Product();
 
-            //properties cannot be used in place of variables as seen below
-            Decimal.TryParse("123", out var price);
-            product.Price = price;
+        //    //properties cannot be used in place of variables as seen below
+        //    Decimal.TryParse("123", out var price);
+        //    product.Price = price;
 
-            var name = product.Name;
-            //var name = product.GetName();
-            product.Name = "Product A";
-            product.Price = 50;
-            product.IsDiscontinued = true;
+        //    var name = product.Name;
+        //    //var name = product.GetName();
+        //    product.Name = "Product A";
+        //    product.Price = 50;
+        //    product.IsDiscontinued = true;
 
-            //product.ActualPrice = 10;
-            var price2 = product.ActualPrice;
+        //    //product.ActualPrice = 10;
+        //    var price2 = product.ActualPrice;
 
-            //product.SetName("Product A");
-            //product.Description = "None";
-            var error = product.Validate();
+        //    //product.SetName("Product A");
+        //    //product.Description = "None";
+        //    var error = product.Validate();
 
-            var str = product.ToString();
+        //    var str = product.ToString();
 
-            var productB = new Product();
-            //productB.Name = "Product B";
-            //productB.SetName("Product B");
-            //productB.Description = product.Description;
-            error = productB.Validate();
-        }
+        //    var productB = new Product();
+        //    //productB.Name = "Product B";
+        //    //productB.SetName("Product B");
+        //    //productB.Description = product.Description;
+        //    error = productB.Validate();
+        //}
 
         private void OnProductAdd( object sender, EventArgs e )
         {
@@ -126,7 +127,7 @@ namespace Nile.Windows
 
             //Add to database
             form.Product.Id = product.Id;
-            _database.Edit(form.Product, out var message);
+            _database.Update(form.Product, out var message);
             if (!String.IsNullOrEmpty(message))
                 MessageBox.Show(message);
 
@@ -156,6 +157,6 @@ namespace Nile.Windows
             return (MessageBox.Show(this, message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
         }
 
-        private MemoryProductDatabase _database = new MemoryProductDatabase();
+        private IProductDatabase _database = new MemoryProductDatabase();
     }
 }

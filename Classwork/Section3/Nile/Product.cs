@@ -88,10 +88,10 @@ namespace Nile
 
             //NAme is requried
             if (String.IsNullOrEmpty(_name))
-                errors.Add(new ValidationResult("Name cannot be empty", new [] { "Name" }));
+                errors.Add(new ValidationResult("Name cannot be empty", new [] { nameof(Name) }));
 
             if (Price < 0)
-                errors.Add(new ValidationResult("Price must be >= 0", new[] { "Price" }));
+                errors.Add(new ValidationResult("Price must be >= 0", new[] { nameof(Price) }));
 
             return errors;
         }

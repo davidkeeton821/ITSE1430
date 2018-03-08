@@ -14,7 +14,7 @@ namespace Nile
         {
             var context = new ValidationContext(value);
             var errors = new Collection<ValidationResult>();
-            var results = Validator.TryValidateObject(value, errors, true);
+            var results = Validator.TryValidateObject(value, context, errors, true);
 
             return errors;
         }

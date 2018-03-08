@@ -79,13 +79,13 @@ namespace Nile.Windows
             IsDiscontinued = _chkIsDicsontinued.Checked,
             };
 
-            //Validate
-            var message = product.Validate();
-            if (!String.IsNullOrEmpty(message))
-            { 
-                DisplayError(message);
-                return;               
-            }
+            //Validate product
+            var errors = ObjectValidator.Validate(product);
+            if (errors.Count() > 0)
+            {
+                DisplayError(errors.ElementAt(0).ErrorMessage);
+                return;
+            };
 
             //return from form
             Product = product;
