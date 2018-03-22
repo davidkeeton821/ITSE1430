@@ -75,6 +75,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Properties\DataSources\Nile.Data.IProductDatabase.datasource" />
+    <None Include="Properties\DataSources\Nile.Data.ProductDatabase.datasource" />
     <None Include="Properties\DataSources\Nile.Product.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

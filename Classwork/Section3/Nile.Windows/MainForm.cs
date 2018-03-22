@@ -26,46 +26,7 @@ namespace Nile.Windows
             RefreshUI();
         }
 
-        #region Event Handlers
-        private void RefreshUI()
-        {
-            //Get products
-            var products = _database.GetAll();
-
-            //Bind to grid
-            dataGridView1.DataSource = new List<Product>(products);
-        }
-        #endregion
-
-        //private void PlayingWithProductMembers()
-        //{
-        //    var product = new Product();
-
-        //    //properties cannot be used in place of variables as seen below
-        //    Decimal.TryParse("123", out var price);
-        //    product.Price = price;
-
-        //    var name = product.Name;
-        //    //var name = product.GetName();
-        //    product.Name = "Product A";
-        //    product.Price = 50;
-        //    product.IsDiscontinued = true;
-
-        //    //product.ActualPrice = 10;
-        //    var price2 = product.ActualPrice;
-
-        //    //product.SetName("Product A");
-        //    //product.Description = "None";
-        //    var error = product.Validate();
-
-        //    var str = product.ToString();
-
-        //    var productB = new Product();
-        //    //productB.Name = "Product B";
-        //    //productB.SetName("Product B");
-        //    //productB.Description = product.Description;
-        //    error = productB.Validate();
-        //}
+        #region Event Handlers       
 
         private void OnProductAdd( object sender, EventArgs e )
         {
@@ -88,15 +49,19 @@ namespace Nile.Windows
 
         private void OnProductRemove( object sender, EventArgs e )
         {
-            //Get selected product
+            ///Get selected product
             var product = GetSelectedProduct();
             if (product == null)
+            {
+                MessageBox.Show(this, "No Product Selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            };
 
-            //var index = FindEmptyProductIndex() - 1;
-            //if (index < 0)
-            //    return;
+            DeleteProduct(product);
+        }
 
+        private void DeleteProduct( Product product )
+        {
             if (!ShowConfirmation("Are you sure?", "Remove Product"))
                 return;
 
@@ -105,19 +70,22 @@ namespace Nile.Windows
 
             RefreshUI();
         }
-        
 
         private void OnProductEdit( object sender, EventArgs e )
         {
             //Get selected product
             var product = GetSelectedProduct();
             if (product == null)
+            {
+                MessageBox.Show(this, "No Product Selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            };
 
-            //var index = FindEmptyProductIndex() - 1;
-            //if (index < 0)
-            //    return;
+            EditProduct(product);
+        }
 
+        private void EditProduct(Product product)
+        {
             var form = new ProductDetailForm(product);
 
             //Show form modally
@@ -143,7 +111,7 @@ namespace Nile.Windows
         {
             MessageBox.Show(this, "Not Implemented", "Help About", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         }
-
+#endregion
         private Product GetSelectedProduct ()
         {
             if (dataGridView1.SelectedRows.Count > 0)
@@ -152,11 +120,48 @@ namespace Nile.Windows
             return null;
         }
 
+        private void RefreshUI()
+        {
+            //Get products
+            var products = _database.GetAll();
+            //products[0].Name = "Product A";
+
+            //Bind to grid
+            productBindingSource.DataSource = products.ToList();
+            //dataGridView1.DataSource = new List<Product>(products);
+        }
+
         private bool ShowConfirmation( string message, string title)
         {
             return (MessageBox.Show(this, message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
         }
 
         private IProductDatabase _database = new MemoryProductDatabase();
+
+        private void OnCellDoubleClick( object sender, DataGridViewCellEventArgs e )
+        {
+            var product = GetSelectedProduct();
+            if (product == null)
+                return;
+            EditProduct(product);
+        }
+
+        private void OnCellKeyDown( object sender, KeyEventArgs e )
+        {
+            var product = GetSelectedProduct();
+            if (product == null)
+                return;
+
+            if (e.KeyCode == Keys.Delete)
+            {              
+                    e.Handled = true;
+                    DeleteProduct(product);               
+            } else if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                EditProduct(product);
+            };
+
+        }
     }
 }

@@ -10,11 +10,11 @@ namespace Nile
 {
     public static class ObjectValidator
     {
-        public static IEnumerable<ValidationResult> Validate (object value)
+        public static IEnumerable<ValidationResult> Validate (this IValidatableObject source)
         {
-            var context = new ValidationContext(value);
+            var context = new ValidationContext(source);
             var errors = new Collection<ValidationResult>();
-            var results = Validator.TryValidateObject(value, context, errors, true);
+            var results = Validator.TryValidateObject(source, context, errors, true);
 
             return errors;
         }
