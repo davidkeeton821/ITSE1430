@@ -58,6 +58,20 @@ namespace DavidKeeton.MovieLib.Data.Memory
 
             return null;           
         }
+
+        private Movie GetActual( int id )
+        {
+            if (id > 0)
+            {
+                foreach (var movie in _movies)
+                {
+                    if (movie.Id == id)
+                        return movie;
+                };
+            }
+
+            return null;
+        }
         public IEnumerable<Movie> GetAll()
         {
             foreach (var movie in _movies)
@@ -71,7 +85,7 @@ namespace DavidKeeton.MovieLib.Data.Memory
         {
             if (id > 0)
             {
-                var existing = Get(id);
+                var existing = GetActual(id);
                 if (existing != null)
                 {
                     _movies.Remove(existing);
@@ -107,7 +121,7 @@ namespace DavidKeeton.MovieLib.Data.Memory
             };
 
             //Find Existing
-            existing = existing ?? Get(movie.Id);
+            existing = existing ?? GetActual(movie.Id);
             if (existing == null)
             {
                 message = "Movie not found";

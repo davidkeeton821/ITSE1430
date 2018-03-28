@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this._miFile = new System.Windows.Forms.ToolStripMenuItem();
             this._miFileExit = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,21 +91,21 @@
             // _miMoviesAdd
             // 
             this._miMoviesAdd.Name = "_miMoviesAdd";
-            this._miMoviesAdd.Size = new System.Drawing.Size(128, 26);
+            this._miMoviesAdd.Size = new System.Drawing.Size(181, 26);
             this._miMoviesAdd.Text = "&Add";
             this._miMoviesAdd.Click += new System.EventHandler(this.OnMoviesAdd);
             // 
             // _miMoviesEdit
             // 
             this._miMoviesEdit.Name = "_miMoviesEdit";
-            this._miMoviesEdit.Size = new System.Drawing.Size(128, 26);
+            this._miMoviesEdit.Size = new System.Drawing.Size(181, 26);
             this._miMoviesEdit.Text = "&Edit";
             this._miMoviesEdit.Click += new System.EventHandler(this.OnMoviesEdit);
             // 
             // _miMoviesDelete
             // 
             this._miMoviesDelete.Name = "_miMoviesDelete";
-            this._miMoviesDelete.Size = new System.Drawing.Size(128, 26);
+            this._miMoviesDelete.Size = new System.Drawing.Size(181, 26);
             this._miMoviesDelete.Text = "&Delete";
             this._miMoviesDelete.Click += new System.EventHandler(this.OnMoviesDelete);
             // 
@@ -133,8 +133,8 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -153,12 +153,15 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(682, 325);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellDoubleClick);
+            this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
+            this.dataGridView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnCellKeyDown);
             // 
             // titleDataGridViewTextBoxColumn
             // 
             this.titleDataGridViewTextBoxColumn.DataPropertyName = "Title";
             this.titleDataGridViewTextBoxColumn.FillWeight = 33F;
-            this.titleDataGridViewTextBoxColumn.Frozen = true;
             this.titleDataGridViewTextBoxColumn.HeaderText = "Title";
             this.titleDataGridViewTextBoxColumn.MinimumWidth = 100;
             this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
@@ -202,6 +205,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Movie Library";
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.movieBindingSource)).EndInit();

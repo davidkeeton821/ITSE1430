@@ -4,6 +4,10 @@
  * Lab2 ITSE 1430
  */
 
+//TODO failed call to database pops up error in movieDetailForm
+//TODO validation in corrrect places in UI/not in UI
+//TODO ability to deselect row in datagridview
+
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -47,6 +51,11 @@ namespace DavidKeeton.MovieLib.Windows
                 return;
             };
 
+            EditMovie(movie);           
+        }
+
+        private void EditMovie(Movie movie)
+        {
             var form = new MovieDetailForm(movie);
 
             var result = form.ShowDialog(this);
@@ -70,6 +79,11 @@ namespace DavidKeeton.MovieLib.Windows
                 return;
             };
 
+            DeleteMovie(movie);
+        }
+
+        private void DeleteMovie( Movie movie )
+        {
             if (!ShowConfirmation("Are you sure?", "Delete Movie"))
                 return;
 
@@ -90,8 +104,7 @@ namespace DavidKeeton.MovieLib.Windows
         private Movie GetSelectedMovie()
         {
             if (dataGridView1.SelectedRows.Count > 0)
-                return dataGridView1.SelectedRows[0].DataBoundItem as Movie;
-
+                return movieBindingSource.Current as Movie;           
             return null;
         }
 
@@ -103,10 +116,65 @@ namespace DavidKeeton.MovieLib.Windows
         private void RefreshUI()
         {
             var movies = _database.GetAll();
-
+            movieBindingSource.RaiseListChangedEvents = false;
             movieBindingSource.DataSource = movies.ToList();
+            movieBindingSource.RaiseListChangedEvents = true;
+            movieBindingSource.ResetBindings(true);
         }
 
         private IMovieDatabase _database = new MemoryMovieDatabase();
+
+        private void OnCellDoubleClick( object sender, DataGridViewCellEventArgs e )
+        {
+            if (e.RowIndex == -1)
+                return;
+            var movie = GetSelectedMovie();
+            if (movie == null)
+                return;
+            EditMovie(movie);
+        }
+
+        private void OnCellKeyDown( object sender, KeyEventArgs e )
+        {
+            var movie = GetSelectedMovie();
+            if (movie == null)
+                return;
+
+            if(e.KeyCode == Keys.Delete)
+            {
+                e.Handled = true;
+                DeleteMovie(movie);
+            }else if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                EditMovie(movie);
+            };
+        }
+
+        private void dataGridView1_CellClick( object sender, DataGridViewCellEventArgs e )
+        {
+
+        }
+
+        private void dataGridView1_Click( object sender, EventArgs e )
+        {
+            var grid = sender as DataGridView;
+            var mouse = e as MouseEventArgs;
+            if (grid.Focused == true)
+                OnMouseUp(grid, mouse);
+        }
+
+        private void OnMouseUp( object sender, MouseEventArgs e )
+        {
+            var grid = sender as DataGridView;
+            if(e.Button == MouseButtons.Left)
+            {
+                if(grid.HitTest(e.X, e.Y) == DataGridView.HitTestInfo.Nowhere)
+                {
+                    grid.ClearSelection();
+                    grid.CurrentCell = null;
+                };
+            }               
+        }
     }
 }
