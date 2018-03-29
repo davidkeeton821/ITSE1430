@@ -1,12 +1,8 @@
 ﻿/*
  * David Keeton
- * 2/23/2018
- * Lab2 ITSE 1430
+ * 3/29/2018
+ * Lab3 ITSE 1430
  */
-
-//TODO failed call to database pops up error in movieDetailForm
-//TODO validation in corrrect places in UI/not in UI
-//TODO ability to deselect row in datagridview
 
 using System;
 using System.Linq;
@@ -22,6 +18,54 @@ namespace DavidKeeton.MovieLib.Windows
             InitializeComponent();
         }
 
+        protected override void OnLoad( EventArgs e )
+        {
+            base.OnLoad(e);
+
+            RefreshUI();
+        }
+
+        #region Event Handlers
+        //called when a cell is double clicked
+        private void OnCellDoubleClick( object sender, DataGridViewCellEventArgs e )
+        {
+            if (e.RowIndex == -1)
+                return;
+            var movie = GetSelectedMovie();
+            if (movie == null)
+                return;
+            EditMovie(movie);
+        }
+
+        //Called when a key is pressed while in a cell
+        private void OnCellKeyDown( object sender, KeyEventArgs e )
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                e.Handled = true;
+                OnMoviesDelete(sender, e);
+            } else if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                OnMoviesEdit(sender, e);
+            };
+        }
+
+        //if click happens and doesn't select anything, deselect currently selected row
+        private void OnMouseClick( object sender, EventArgs e )
+        {
+            var mouse = e as MouseEventArgs;
+            var grid = sender as DataGridView;
+            if (mouse.Button == MouseButtons.Left)
+            {
+                if (grid.HitTest(mouse.X, mouse.Y) == DataGridView.HitTestInfo.Nowhere)
+                {
+                    grid.ClearSelection();
+                    grid.CurrentCell = null;
+                };
+            }
+        }
+
         private void OnFileExit( object sender, EventArgs e )
         {
             Close();
@@ -30,12 +74,15 @@ namespace DavidKeeton.MovieLib.Windows
         private void OnMoviesAdd( object sender, EventArgs e )
         {
             var form = new MovieDetailForm("Add Product");
+            //if any errors occur, show MovieDetailForm again with same info          
             while (true)
             {
+                //Show form modally
                 var result = form.ShowDialog(this);
                 if (result != DialogResult.OK)
                     return;
 
+                //Add to database
                 _database.Add(form.Movie, out var message);
                 if (!String.IsNullOrEmpty(message))
                     MessageBox.Show(message);
@@ -48,6 +95,7 @@ namespace DavidKeeton.MovieLib.Windows
 
         private void OnMoviesEdit( object sender, EventArgs e )
         {
+            //Get selected movie
             var movie = GetSelectedMovie();
             if (movie == null)
             {
@@ -58,27 +106,9 @@ namespace DavidKeeton.MovieLib.Windows
             EditMovie(movie);           
         }
 
-        private void EditMovie(Movie movie)
-        {
-            var form = new MovieDetailForm(movie);
-            while (true)
-            {
-                var result = form.ShowDialog(this);
-                if (result != DialogResult.OK)
-                    return;
-
-                form.Movie.Id = movie.Id;
-                _database.Update(form.Movie, out var message);
-                if (!String.IsNullOrEmpty(message))
-                    MessageBox.Show(message);
-                else
-                    break;
-            }
-            RefreshUI();
-        }
-
         private void OnMoviesDelete( object sender, EventArgs e )
         {
+            //Get selected movie
             var movie = GetSelectedMovie();
             if (movie == null)
             {
@@ -89,16 +119,6 @@ namespace DavidKeeton.MovieLib.Windows
             DeleteMovie(movie);
         }
 
-        private void DeleteMovie( Movie movie )
-        {
-            if (!ShowConfirmation("Are you sure?", "Delete Movie"))
-                return;
-
-            _database.Remove(movie.Id);
-
-            RefreshUI();
-        }
-
         private void OnHelpAbout( object sender, EventArgs e )
         {
             var form = new AboutForm();
@@ -107,7 +127,44 @@ namespace DavidKeeton.MovieLib.Windows
             if (result == DialogResult.OK)
                 return;
         }
+        #endregion Event Handlers
 
+        #region Private Members
+        //Helper method to handle editing products
+        private void EditMovie( Movie movie )
+        {
+            var form = new MovieDetailForm(movie);
+            //if an error occurs, show MovieDetailForm again with same info
+            while (true)
+            {
+                var result = form.ShowDialog(this);
+                if (result != DialogResult.OK)
+                    return;
+
+                //Update product
+                form.Movie.Id = movie.Id;
+                _database.Update(form.Movie, out var message);
+                if (!String.IsNullOrEmpty(message))
+                    MessageBox.Show(message);
+                else
+                    break;
+            }
+            RefreshUI();
+        }
+
+        //Helper method to handle deleting products
+        private void DeleteMovie( Movie movie )
+        {
+            if (!ShowConfirmation("Are you sure?", "Delete Movie"))
+                return;
+
+            //Remove product
+            _database.Remove(movie.Id);
+
+            RefreshUI();
+        }
+
+        //Helper method to return movie selected in grid
         private Movie GetSelectedMovie()
         {
             if (dataGridView1.SelectedRows.Count > 0)
@@ -122,64 +179,16 @@ namespace DavidKeeton.MovieLib.Windows
 
         private void RefreshUI()
         {
+            //Get products
             var movies = _database.GetAll();
+            //Reset binding of the grid without throwing events
             movieBindingSource.RaiseListChangedEvents = false;
             movieBindingSource.DataSource = movies.ToList();
             movieBindingSource.RaiseListChangedEvents = true;
             movieBindingSource.ResetBindings(true);
         }
 
-
-
-        private void OnCellDoubleClick( object sender, DataGridViewCellEventArgs e )
-        {
-            if (e.RowIndex == -1)
-                return;
-            var movie = GetSelectedMovie();
-            if (movie == null)
-                return;
-            EditMovie(movie);
-        }
-
-        private void OnCellKeyDown( object sender, KeyEventArgs e )
-        {           
-            if(e.KeyCode == Keys.Delete)
-            {
-                e.Handled = true;
-                OnMoviesDelete(sender, e);
-            }else if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-                OnMoviesEdit(sender, e);
-            };         
-        }
-
-        private void dataGridView1_CellClick( object sender, DataGridViewCellEventArgs e )
-        {
-
-        }
-
-        private void dataGridView1_Click( object sender, EventArgs e )
-        {
-            var grid = sender as DataGridView;
-            var mouse = e as MouseEventArgs;
-            if (grid.Focused == true)
-                OnMouseUp(grid, mouse);
-        }
-
-        private void OnMouseUp( object sender, MouseEventArgs e )
-        {
-            var grid = sender as DataGridView;
-            if(e.Button == MouseButtons.Left)
-            {
-                if(grid.HitTest(e.X, e.Y) == DataGridView.HitTestInfo.Nowhere)
-                {
-                    grid.ClearSelection();
-                    grid.CurrentCell = null;
-                };
-            }               
-        }
         private IMovieDatabase _database = new MemoryMovieDatabase();
+        #endregion
     }
-   
 }
