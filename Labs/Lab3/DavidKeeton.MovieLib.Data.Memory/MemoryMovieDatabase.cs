@@ -17,16 +17,6 @@ namespace DavidKeeton.MovieLib.Data.Memory
                 return null;
             };
 
-            //?????????
-            var errors = movie.Validate(new ValidationContext(movie));
-
-            var error = errors.FirstOrDefault();
-            if (error != null)
-            {
-                message = error.ErrorMessage;
-                return null;
-            }
-
             //Verify Unique product
             var existing = GetMovieByName(movie.Title);
             if (existing != null)
@@ -55,7 +45,6 @@ namespace DavidKeeton.MovieLib.Data.Memory
                         return Clone(movie);
                 };
             }
-
             return null;           
         }
 
@@ -69,7 +58,6 @@ namespace DavidKeeton.MovieLib.Data.Memory
                         return movie;
                 };
             }
-
             return null;
         }
         public IEnumerable<Movie> GetAll()
@@ -102,15 +90,6 @@ namespace DavidKeeton.MovieLib.Data.Memory
                 message = "Movie cannot be null.";
                 return null;
             };
-
-            //Validation
-            var context = new ValidationContext(movie as IValidatableObject);
-            var errors = movie.Validate(context);
-            if (errors.Count() > 0)
-            {
-                message = errors.ElementAt(0).ErrorMessage;
-                return null;
-            }
 
             //Verify Unique product
             var existing = GetMovieByName(movie.Title);

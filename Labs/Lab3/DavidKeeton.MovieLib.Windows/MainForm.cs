@@ -30,14 +30,18 @@ namespace DavidKeeton.MovieLib.Windows
         private void OnMoviesAdd( object sender, EventArgs e )
         {
             var form = new MovieDetailForm("Add Product");
+            while (true)
+            {
+                var result = form.ShowDialog(this);
+                if (result != DialogResult.OK)
+                    return;
 
-            var result = form.ShowDialog(this);
-            if (result != DialogResult.OK)
-                return;
-
-            _database.Add(form.Movie, out var message);
-            if (!String.IsNullOrEmpty(message))
-                MessageBox.Show(message);
+                _database.Add(form.Movie, out var message);
+                if (!String.IsNullOrEmpty(message))
+                    MessageBox.Show(message);
+                else
+                    break;
+            }
 
             RefreshUI();
         }
@@ -47,7 +51,7 @@ namespace DavidKeeton.MovieLib.Windows
             var movie = GetSelectedMovie();
             if (movie == null)
             {
-                MessageBox.Show(this, "No movie to edit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "No Movie Selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             };
 
@@ -57,16 +61,19 @@ namespace DavidKeeton.MovieLib.Windows
         private void EditMovie(Movie movie)
         {
             var form = new MovieDetailForm(movie);
+            while (true)
+            {
+                var result = form.ShowDialog(this);
+                if (result != DialogResult.OK)
+                    return;
 
-            var result = form.ShowDialog(this);
-            if (result != DialogResult.OK)
-                return;
-
-            form.Movie.Id = movie.Id;
-            _database.Update(form.Movie, out var message);
-            if (!String.IsNullOrEmpty(message))
-                MessageBox.Show(message);
-
+                form.Movie.Id = movie.Id;
+                _database.Update(form.Movie, out var message);
+                if (!String.IsNullOrEmpty(message))
+                    MessageBox.Show(message);
+                else
+                    break;
+            }
             RefreshUI();
         }
 
@@ -75,7 +82,7 @@ namespace DavidKeeton.MovieLib.Windows
             var movie = GetSelectedMovie();
             if (movie == null)
             {
-                MessageBox.Show(this, "No movie to edit", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "No movie to Delete", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             };
 
@@ -122,7 +129,7 @@ namespace DavidKeeton.MovieLib.Windows
             movieBindingSource.ResetBindings(true);
         }
 
-        private IMovieDatabase _database = new MemoryMovieDatabase();
+
 
         private void OnCellDoubleClick( object sender, DataGridViewCellEventArgs e )
         {
@@ -135,20 +142,16 @@ namespace DavidKeeton.MovieLib.Windows
         }
 
         private void OnCellKeyDown( object sender, KeyEventArgs e )
-        {
-            var movie = GetSelectedMovie();
-            if (movie == null)
-                return;
-
+        {           
             if(e.KeyCode == Keys.Delete)
             {
                 e.Handled = true;
-                DeleteMovie(movie);
+                OnMoviesDelete(sender, e);
             }else if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
-                EditMovie(movie);
-            };
+                OnMoviesEdit(sender, e);
+            };         
         }
 
         private void dataGridView1_CellClick( object sender, DataGridViewCellEventArgs e )
@@ -176,5 +179,7 @@ namespace DavidKeeton.MovieLib.Windows
                 };
             }               
         }
+        private IMovieDatabase _database = new MemoryMovieDatabase();
     }
+   
 }

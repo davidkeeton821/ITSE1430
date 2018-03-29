@@ -43,9 +43,19 @@ namespace Nile.Windows
                 return;
 
             //Add to database
-            _database.Add(form.Product, out var message);
-            if (!String.IsNullOrEmpty(message))
-                MessageBox.Show(message);
+            //_database.Add(form.Product);
+            try
+            {
+                _database.Add(null);
+            } catch (NotImplementedException)
+            {
+                MessageBox.Show("Not Implemented Yet");
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            //if (!String.IsNullOrEmpty(message))
+            //    MessageBox.Show(message);
 
             RefreshUI();
         }
@@ -69,7 +79,13 @@ namespace Nile.Windows
                 return;
 
             //Remove product
-            _database.Remove(product.Id);
+            try
+            {
+                _database.Remove(product.Id);
+            } catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
             RefreshUI();
         }
@@ -98,9 +114,13 @@ namespace Nile.Windows
 
             //Add to database
             form.Product.Id = product.Id;
-            _database.Update(form.Product, out var message);
-            if (!String.IsNullOrEmpty(message))
-                MessageBox.Show(message);
+            try
+            {
+                _database.Update(form.Product);
+            } catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            };
 
             RefreshUI();
         }
@@ -126,11 +146,17 @@ namespace Nile.Windows
         private void RefreshUI()
         {
             //Get products
-            var products = _database.GetAll();
-            //products[0].Name = "Product A";
+            IEnumerable<Product> products = null;
+            try
+            {
+                products = _database.GetAll();
+            } catch (Exception)
+            {
+                MessageBox.Show("Error loading products");
+            }
 
             //Bind to grid
-            productBindingSource.DataSource = products.ToList();
+            productBindingSource.DataSource = products?.ToList();
             //dataGridView1.DataSource = new List<Product>(products);
         }
 

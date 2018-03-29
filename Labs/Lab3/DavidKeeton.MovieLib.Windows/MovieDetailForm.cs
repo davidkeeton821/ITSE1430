@@ -55,9 +55,6 @@ namespace DavidKeeton.MovieLib.Windows
 
         private void OnSave( object sender, EventArgs e )
         {
-            if(!ValidateChildren())
-                return;
-
             var movie = new Movie()  {                     
             Title = _textTitle.Text,
             Description = _textDescription.Text,
@@ -86,11 +83,11 @@ namespace DavidKeeton.MovieLib.Windows
 
             return -1;
         }
-
         private void DisplayError( string message )
         {
             MessageBox.Show(this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
 
         private void _textTitle_Validating( object sender, CancelEventArgs e )
         {

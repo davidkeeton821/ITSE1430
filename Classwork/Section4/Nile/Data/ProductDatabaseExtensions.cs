@@ -14,17 +14,17 @@ namespace Nile.Data
             source.Add(new Product() {
                 Name = "iPhone X",
                 IsDiscontinued = true,
-                Price = 1500, }, out message);
+                Price = 1500, });
             source.Add(new Product() {
                 Name = "Windows Phone",
                 IsDiscontinued = true,
                 Price = 15
-            }, out message);
+            });
             source.Add(new Product() {
                 Name = "Samsung S8",
                 IsDiscontinued = false,
                 Price = 800
-            }, out message);
+            });
         }    
     }
 }
