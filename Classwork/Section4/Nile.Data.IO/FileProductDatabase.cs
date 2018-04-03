@@ -25,12 +25,14 @@ namespace Nile.Data.IO
             return product;
         }
 
-        private void SaveData()
+        private void SaveDataPoorer()
         {
+            Stream stream = null;
+            StreamWriter writer = null;
             try
             {
-                var stream = File.OpenWrite(_filename);
-                var writer = new StreamWriter(stream);
+                stream = File.OpenWrite(_filename);
+                writer = new StreamWriter(stream);
                 foreach (var item in _items)
                 {
                     var line = $"{item.Id},{item.Name},{item.Description},{item.Price},{(item.IsDiscontinued ? 1 : 0)}";
@@ -38,8 +40,7 @@ namespace Nile.Data.IO
                     writer.WriteLine(line);
                 };
 
-                writer.Close();
-                stream.Close();
+
             } catch (ArgumentException e)
             {
                 //Never right!!!
@@ -49,19 +50,38 @@ namespace Nile.Data.IO
             } catch (Exception e)
             {
                 throw new Exception("Save failed", e);
+            } finally
+            {
+                writer?.Close();
+                stream?.Close();
             };
         }
 
-        private void SaveDataNonStream()
+        private void SaveData()
         {
-            var lines = new List<string>();
-
-            foreach (var item in _items)
+            using (var stream = File.OpenWrite(_filename))
+            using (var writer = new StreamWriter(stream))
             {
-                var line = $"{item.Id},{item.Description},{item.Price},{(item.IsDiscontinued ? 1 : 0)}";
+                foreach (var item in _items)
+                {
+                    var line = $"{item.Id},{item.Name},{item.Description},{item.Price},{(item.IsDiscontinued ? 1 : 0)}";
 
-                lines.Add(line);
-            };
+                    writer.WriteLine(line);
+                };
+            };          
+        }
+
+        private void SaveDataNonStream() 
+        {
+            var lines = _items.Select(item => $"{item.Id},{item.Description},{item.Price},{(item.IsDiscontinued ? 1 : 0)}");
+            //var lines = new List<string>();
+
+            //foreach (var item in _items)
+            //{
+            //    var line = $"{item.Id},{item.Description},{item.Price},{(item.IsDiscontinued ? 1 : 0)}";
+
+            //    lines.Add(line);
+            //};
 
             File.WriteAllLines(_filename, lines);
         }
@@ -78,13 +98,12 @@ namespace Nile.Data.IO
             if (_items == null)
             {
                 _items = LoadData();
-                _id = 0;
-                foreach(var item in _items)
+
+                if (_items.Any())
                 {
-                    if (item.Id > _id)
-                        _id = item.Id;
-                }
-                _id++;
+                    _id = _items.Max(i => i.Id);
+                    _id++;
+                };
             }
         }
 
@@ -137,25 +156,25 @@ namespace Nile.Data.IO
         protected override Product GetCore( int id )
         {
             EnsureInitialized();
-            foreach(var item in _items)
-            {
-                if (item.Id == id)
-                    return item;
-            };
 
-            return null;
+            return _items.FirstOrDefault(i => i.Id == id);
+            //foreach(var item in _items)
+            //{
+            //    if (item.Id == id)
+            //        return item;
+            //};
+            //return null;
         }
+
+        //private bool IsId (Product product)
+        //{
+        //    return product.Id == id;
+        //}
 
         protected override Product GetProductByNameCore( string name )
         {
             EnsureInitialized();
-            foreach (var item in _items)
-            {
-                if (String.Compare(item.Name, name, true) == 0)
-                    return item;
-            };
-
-            return null;
+            return _items.FirstOrDefault(i => String.Compare(i.Name, name, true) == 0);
         }
 
         protected override void RemoveCore( int id )

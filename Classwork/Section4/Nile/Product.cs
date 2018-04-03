@@ -19,18 +19,15 @@ namespace Nile
         // value tag allows documenting default value if not "0"
         public string Description
         {
-            //Accessors
-            get { return _description ?? ""; }
-            // Set method can do whatever needed, switch, if/else, method call etc.
-            set { _description = value ?? ""; }
+            get => _description ?? "";
+            set => _description = value ?? "";
         }
 
         /// <summary>Gets or sets the name.</summary>
         public string Name
         {
-            //Accessors
-            get { return _name ?? ""; }
-            set { _name = value; }
+            get => _name ?? "";
+            set => _name = value;
         }
 
         /// <summary>Gets or sets the Price.</summary>
@@ -54,16 +51,11 @@ namespace Nile
         //    internal set { }
         //}
         /// <summary>Gets the price, with any discontinued discounts.</summary>
-        public decimal ActualPrice
-        {
-            get {
-                if (IsDiscontinued)
-                    return Price - (Price * DiscountPercentage);
-
-                return Price;
-            }
+        public decimal ActualPrice => IsDiscontinued ? (Price - (Price * DiscountPercentage)) : Price;
+        //{
+            
             //set { }
-        }
+        //}
 
         ///// <summary> Get the product name. </summary>
         ///// <returns>The name.</returns>
