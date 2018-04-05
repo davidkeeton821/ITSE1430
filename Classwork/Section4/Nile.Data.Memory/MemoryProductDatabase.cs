@@ -44,22 +44,37 @@ namespace Nile.Data.Memory
  
         protected override Product GetCore( int id )
         {
-            foreach (var product in _products)
-            {
-                if (product.Id == id)
-                    return product;
-            };
+            return (from p in _products
+                   where p.Id == id
+                   select p).FirstOrDefault();
 
-            return null;
+            //var items = from p in _products
+            //            where p.Id == id
+            //            select p;
+
+            //return items.FirstOrDefault();
+             
+            //return _products.FirstOrDefault(p => p.Id == id);
+            //foreach (var product in _products)
+            //{
+            //    if (product.Id == id)
+            //        return product;
+            //};
+
+            //return null;
         }
         protected override IEnumerable<Product> GetAllCore()
         {
-            foreach (var product in _products)
-            {
-                if (product != null)
-                    yield return Clone(product);
-            };
+            return from p in _products
+                   select Clone(p);
 
+            //foreach (var product in _products)
+            //{
+            //    if (product != null)
+            //        yield return Clone(product);
+            //};
+
+            //return _products.Select(p => Clone(p));
         }
         protected override void RemoveCore( int id )
         {      
@@ -82,14 +97,20 @@ namespace Nile.Data.Memory
 
         protected override Product GetProductByNameCore( string name )
         {
-            foreach (var product in _products)
-            {
-                //case insensitive comparison
-                if (String.Compare(product.Name, name, true) == 0)
-                    return product;
-            };
+            return (from p in _products
+                    where String.Compare(p.Name, name, true) == 0
+                    select p).FirstOrDefault();
 
-            return null;
+            //foreach (var product in _products)
+            //{
+            //    //case insensitive comparison
+            //    if (String.Compare(product.Name, name, true) == 0)
+            //        return product;
+            //};
+            //return null;
+
+                   //return _products.FirstOrDefault(p => String.Compare(p.Name, name, true) == 0);
+
         }
 
         private Product Clone( Product item )

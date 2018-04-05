@@ -137,10 +137,20 @@ namespace Nile.Windows
 #endregion
         private Product GetSelectedProduct ()
         {
-            if (dataGridView1.SelectedRows.Count > 0)
-                return dataGridView1.SelectedRows[0].DataBoundItem as Product;
+            //return (from r in dataGridView1.SelectedRows.OfType<DataGridViewRow>()
+            //        select r.DataBoundItem as Product).FirstOrDefault();
 
-            return null;
+            var items = (from r in dataGridView1.SelectedRows.OfType<DataGridViewRow>()
+                    select new {
+                        Index = r.Index,
+                        Product = r.DataBoundItem as Product
+                        }).FirstOrDefault();
+
+            return items.Product;
+            //if (dataGridView1.SelectedRows.Count > 0)
+            //    return dataGridView1.SelectedRows[0].DataBoundItem as Product;
+
+            //return null;
         }
 
         private void RefreshUI()

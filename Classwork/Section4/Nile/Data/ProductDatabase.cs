@@ -48,7 +48,14 @@ namespace Nile.Data
 
         public IEnumerable<Product> GetAll()
         {
-            return GetAllCore();
+            return GetAllCore()
+                .OrderBy(p => p.Name)
+                .ThenByDescending(p => p.Id)
+                .Select(p => p);
+
+            //return from p in GetAllCore()
+            //       orderby p.Name, p.Id descending
+            //       select p;
         }
         public void Remove( int id )
         {
