@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nile.Data.Memory", "Nile.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nile.Data.IO", "Nile.Data.IO\Nile.Data.IO.csproj", "{1DBD9912-4089-41BC-9436-980B3AE37424}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nile.Data.Sql", "Nile.Data.Sql\Nile.Data.Sql.csproj", "{4F133C79-281B-4BE2-A051-0B532E5D3CA1}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "NileDatabase", "..\..\..\ClassITSE1430\Classwork\NileDatabase\NileDatabase.sqlproj", "{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,16 @@ Global
 		{1DBD9912-4089-41BC-9436-980B3AE37424}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DBD9912-4089-41BC-9436-980B3AE37424}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DBD9912-4089-41BC-9436-980B3AE37424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F133C79-281B-4BE2-A051-0B532E5D3CA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F133C79-281B-4BE2-A051-0B532E5D3CA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F133C79-281B-4BE2-A051-0B532E5D3CA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F133C79-281B-4BE2-A051-0B532E5D3CA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C0ADF1-90E3-4E66-998C-20FE50D88A2D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
