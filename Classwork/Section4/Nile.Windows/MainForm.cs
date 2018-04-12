@@ -50,7 +50,7 @@ namespace Nile.Windows
             //_database.Add(form.Product);
             try
             {
-                _database.Add(null);
+                _database.Add(form.Product);
             } catch (NotImplementedException)
             {
                 MessageBox.Show("Not Implemented Yet");
