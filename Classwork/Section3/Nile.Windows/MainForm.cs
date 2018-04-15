@@ -134,9 +134,7 @@ namespace Nile.Windows
         private bool ShowConfirmation( string message, string title)
         {
             return (MessageBox.Show(this, message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes);
-        }
-
-        private IProductDatabase _database = new MemoryProductDatabase();
+        }        
 
         private void OnCellDoubleClick( object sender, DataGridViewCellEventArgs e )
         {
@@ -161,7 +159,8 @@ namespace Nile.Windows
                 e.Handled = true;
                 EditProduct(product);
             };
-
         }
+
+        private IProductDatabase _database = new MemoryProductDatabase();
     }
 }
