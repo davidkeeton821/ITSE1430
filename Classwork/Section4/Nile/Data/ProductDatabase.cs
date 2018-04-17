@@ -10,7 +10,6 @@ namespace Nile.Data
     /// <summary>Provides an in-memory product database/// </summary>
     public abstract class ProductDatabase : IProductDatabase
     {
-
         public Product Add( Product product)
         {
             // if (product == null)

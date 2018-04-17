@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -99,13 +100,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DavidKeeton.MovieLib.Data.Memory\DavidKeeton.MovieLib.Data.Memory.csproj">
-      <Project>{3b105c24-72c2-44ee-aea9-5119efe1847e}</Project>
-      <Name>DavidKeeton.MovieLib.Data.Memory</Name>
+    <ProjectReference Include="..\DavidKeeton.MovieLib.Data.Sql\DavidKeeton.MovieLib.Data.Sql.csproj">
+      <Project>{12a46e91-c8ed-4a28-834a-55f50ea09d5b}</Project>
+      <Name>DavidKeeton.MovieLib.Data.Sql</Name>
     </ProjectReference>
     <ProjectReference Include="..\DavidKeeton.MovieLib\DavidKeeton.MovieLib.csproj">
       <Project>{b9157ade-cd91-43fb-adda-341a911be940}</Project>
       <Name>DavidKeeton.MovieLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MovieDatabase\MovieDatabase.sqlproj">
+      <Project>{d336cd26-c9b8-4b7f-83e7-2f951df1fabc}</Project>
+      <Name>MovieDatabase</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
